@@ -22,9 +22,29 @@ class HomeState extends State<Home> {
   Widget build(BuildContext context) {
     UserNot userNotifier = Provider.of<UserNot>(
         context); //This is used for creating the instance of UserNot
+    //watch() function disadvantage is that rebuilds the app whenver the listener is notified
+    //Consumer does not rebuild the widget tree again and again
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
+        actions: [
+          Center(
+            //This Selector is equally powerful as Consumer or watch() function
+            //Unlike watch() function it does not rebuild the widget tree again and again
+            //It is highly selective and filter updates by selecting limited amount of values
+            child: Selector<UserNot, int>(
+              selector: (_, notifier) => notifier.age,
+              builder: (_, age, __) => Text(
+                age.toString(),
+              ),
+            ),
+          )
+        ],
+        leading: Text(
+          context.watch<int>().toString(),
+        ),
+        //Using Stream Provier here
+        //We could have also used Consumer here
         title: Text(
           context.watch<String>(),
           //We can also use watch()
@@ -46,8 +66,7 @@ class HomeState extends State<Home> {
                 initialData: "Loading Data...",
                 child: Consumer<String>(
                   //If we are using watch() it is getting confused but with Consumer giving expected answer
-                  builder: (_,notif,__)=>
-                  Text(
+                  builder: (_, notif, __) => Text(
                     notif,
                   ),
                 ),
@@ -94,6 +113,19 @@ class HomeState extends State<Home> {
                       );
                     },
                   ),
+                  SizedBox(width: 8),
+                  CheetahButton(
+                    text: 'Age',
+                    onPressed: () {
+                      context.read<UserNot>().incrementAge();
+                    },
+                  ),
+                  SizedBox(width: 8),
+                  CheetahButton(
+                      text: 'Height',
+                      onPressed: () {
+                        context.read<UserNot>().incrementHeight();
+                      }),
                 ],
               ),
               SizedBox(height: 20),
