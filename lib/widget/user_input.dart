@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class CheetahInput extends StatelessWidget {
+class UserInput extends StatelessWidget {
   final String labelText;
   final Function onSaved;
 
-  CheetahInput({
+  UserInput({
     @required this.labelText,
     @required this.onSaved,
   });

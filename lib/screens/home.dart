@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_provider/api/cheetah_api.dart';
+import 'package:flutter_provider/api/prov_api.dart';
 import 'package:flutter_provider/controllers/notifier.dart';
 import 'package:flutter_provider/model/user.dart';
 import 'package:flutter_provider/screens/user_list_screen.dart';
-import 'package:flutter_provider/widget/cheetah_button.dart';
-import 'package:flutter_provider/widget/cheetah_input.dart';
+import 'package:flutter_provider/widget/user_button.dart';
+import 'package:flutter_provider/widget/user_input.dart';
 import 'package:flutter_provider/widget/user_list.dart';
 import 'package:provider/provider.dart';
 
@@ -28,14 +28,17 @@ class HomeState extends State<Home> {
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         actions: [
-          Center(
-            //This Selector is equally powerful as Consumer or watch() function
-            //Unlike watch() function it does not rebuild the widget tree again and again
-            //It is highly selective and filter updates by selecting limited amount of values
-            child: Selector<UserNot, int>(
-              selector: (_, notifier) => notifier.age,
-              builder: (_, age, __) => Text(
-                age.toString(),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
+              //This Selector is equally powerful as Consumer or watch() function
+              //Unlike watch() function it does not rebuild the widget tree again and again
+              //It is highly selective and filter updates by selecting limited amount of values
+              child: Selector<UserNot, int>(
+                selector: (_, notifier) => notifier.age,
+                builder: (_, age, __) => Text(
+                  age.toString(),
+                ),
               ),
             ),
           )
@@ -61,25 +64,28 @@ class HomeState extends State<Home> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              FutureProvider(
-                create: (_) => getCurrentTime(),
-                initialData: "Loading Data...",
-                child: Consumer<String>(
-                  //If we are using watch() it is getting confused but with Consumer giving expected answer
-                  builder: (_, notif, __) => Text(
-                    notif,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: FutureProvider(
+                  create: (_) => getCurrentTime(),
+                  initialData: "Loading Data...",
+                  child: Consumer<String>(
+                    //If we are using watch() it is getting confused but with Consumer giving expected answer
+                    builder: (_, notif, __) => Text(
+                      notif,
+                    ),
                   ),
                 ),
               ), //Here we are localizing the Future provider to a single class.
               //Earlier we had used it in MultiProvider
-              CheetahInput(
+              UserInput(
                 labelText: 'Name',
                 onSaved: (String value) {
                   _name = value;
                 },
               ),
               SizedBox(height: 16),
-              CheetahInput(
+              UserInput(
                 labelText: 'City',
                 onSaved: (String value) {
                   _city = value;
@@ -89,7 +95,7 @@ class HomeState extends State<Home> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CheetahButton(
+                  UserButton(
                     text: 'Add',
                     onPressed: () {
                       if (!_formKey.currentState.validate()) return;
@@ -102,7 +108,7 @@ class HomeState extends State<Home> {
                     },
                   ),
                   SizedBox(width: 8),
-                  CheetahButton(
+                  UserButton(
                     text: 'List',
                     onPressed: () {
                       Navigator.push(
@@ -114,15 +120,16 @@ class HomeState extends State<Home> {
                     },
                   ),
                   SizedBox(width: 8),
-                  CheetahButton(
+                  UserButton(
                     text: 'Age',
                     onPressed: () {
                       context.read<UserNot>().incrementAge();
                     },
                   ),
                   SizedBox(width: 8),
-                  CheetahButton(
+                  UserButton(
                       text: 'Height',
+
                       onPressed: () {
                         context.read<UserNot>().incrementHeight();
                       }),
