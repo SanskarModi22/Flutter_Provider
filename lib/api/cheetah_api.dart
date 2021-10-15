@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 Future<String> getProfileUserName() async {
   await Future.delayed(Duration(seconds: 5));
 
-  return "Julian Currie";
+  return "Sanskar Modi";
 }
 
 Future<String> getCurrentTime() async {

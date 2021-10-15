@@ -29,9 +29,15 @@ class HomeState extends State<Home> {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
-        title: Text(
-          "Provider Demo",
-          style: TextStyle(color: Colors.white),
+        title: Consumer<String>(
+          builder: (_,title,__)=>
+           Text(
+            title,
+            //we are getting data from the future provider
+             //If we had 2 future provider return String type then this would have called
+             //2 times at intervals
+            style: TextStyle(color: Colors.white),
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -65,7 +71,9 @@ class HomeState extends State<Home> {
 
                       _formKey.currentState.save();
 
-                      userNotifier.addUser(User(_name,_city));
+                      context.read<UserNot>().addUser(User(_name,_city));
+                      //Whenever we use any function from a Notifier class we use read function
+                      //and not watch() function+
                     },
                   ),
                   SizedBox(width: 8),

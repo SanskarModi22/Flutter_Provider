@@ -32,7 +32,7 @@ class UserList extends StatelessWidget {
               ),
               IconButton(
                   icon: Icon(Icons.delete),
-                  onPressed: () => context.watch<UserNot>().deleteUser(index),
+                  onPressed: () => context.read<UserNot>().deleteUser(index),
                 ),
 
             ],

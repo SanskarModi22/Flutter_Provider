@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_provider/api/cheetah_api.dart';
 import 'package:flutter_provider/controllers/notifier.dart';
 import 'package:flutter_provider/screens/home.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +11,8 @@ void main() => runApp(
           ChangeNotifierProvider(
             create: (context) => UserNot(),
           ),
+          FutureProvider(create:(_)=> getProfileUserName(), initialData: "Loading Data ..."),
+          StreamProvider(create: (_)=>getSessionTime(), initialData:0)
         ],
         child: MyApp(),
       ),
