@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'package:flutter_provider/api/cheetah_api.dart';
 import 'package:flutter_provider/controllers/notifier.dart';
 import 'package:flutter_provider/model/user.dart';
 import 'package:flutter_provider/screens/user_list_screen.dart';
@@ -16,28 +16,22 @@ class Home extends StatefulWidget {
 class HomeState extends State<Home> {
   String _name;
   String _city;
-
-
-
-
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    UserNot userNotifier = Provider.of<UserNot>(context);//This is used for creating the instance of UserNot
+    UserNot userNotifier = Provider.of<UserNot>(
+        context); //This is used for creating the instance of UserNot
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
-        title: Consumer<String>(
-          builder: (_,title,__)=>
-           Text(
-            title,
-            //we are getting data from the future provider
-             //If we had 2 future provider return String type then this would have called
-             //2 times at intervals
-            style: TextStyle(color: Colors.white),
-          ),
+        title: Text(
+          context.watch<String>(),
+          //We can also use watch()
+          //we are getting data from the future provider
+          //If we had 2 future provider return String type then this would have called
+          //2 times at intervals
+          style: TextStyle(color: Colors.white),
         ),
       ),
       body: SingleChildScrollView(
@@ -47,6 +41,18 @@ class HomeState extends State<Home> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              FutureProvider(
+                create: (_) => getCurrentTime(),
+                initialData: "Loading Data...",
+                child: Consumer<String>(
+                  //If we are using watch() it is getting confused but with Consumer giving expected answer
+                  builder: (_,notif,__)=>
+                  Text(
+                    notif,
+                  ),
+                ),
+              ), //Here we are localizing the Future provider to a single class.
+              //Earlier we had used it in MultiProvider
               CheetahInput(
                 labelText: 'Name',
                 onSaved: (String value) {
@@ -71,7 +77,7 @@ class HomeState extends State<Home> {
 
                       _formKey.currentState.save();
 
-                      context.read<UserNot>().addUser(User(_name,_city));
+                      context.read<UserNot>().addUser(User(_name, _city));
                       //Whenever we use any function from a Notifier class we use read function
                       //and not watch() function+
                     },
@@ -83,8 +89,7 @@ class HomeState extends State<Home> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              UserListScreen(),
+                          builder: (context) => UserListScreen(),
                         ),
                       );
                     },
