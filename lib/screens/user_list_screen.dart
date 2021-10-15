@@ -1,19 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_provider/widget/user_list.dart';
 
-class UserListScreen extends StatefulWidget {
-
-
-  UserListScreen();
-
-  @override
-  _UserListScreenState createState() => _UserListScreenState();
-}
-
-class _UserListScreenState extends State<UserListScreen> {
-
-
+class UserListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 class UserList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    UserNot userNotifier = Provider.of<UserNot>(context);
     return ListView.builder(
       shrinkWrap: true,
       itemBuilder: (BuildContext context, int index) => Card(
@@ -19,32 +18,31 @@ class UserList extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Consumer<UserNot>(
-                    builder: (_, notifier, __) => Text(
-                      'Name: ${notifier.userList[index].name}',
+                   Text(
+                      'Name: ${context.watch<UserNot>().userList[index].name}',
                       style: TextStyle(fontSize: 18),
                     ),
-                  ),
-                  Consumer<UserNot>(
-                    builder: (_, notifier, __) => Text(
-                      'City: ${notifier.userList[index].city}',
-                      style: TextStyle(fontSize: 18),
-                    ),
+//Here we have replaced Consumer with watch() function
+                  Text(
+                    'Name: ${context.watch<UserNot>().userList[index].city}',
+                    style: TextStyle(fontSize: 18),
                   ),
 //Consumer wraps a widget and notify the listener when there are changes in the wrapped widget
                 ],
               ),
-              Consumer<UserNot>(
-                builder: (_, notifier, __) => IconButton(
+              IconButton(
                   icon: Icon(Icons.delete),
-                  onPressed: () => notifier.deleteUser(index),
+                  onPressed: () => context.watch<UserNot>().deleteUser(index),
                 ),
-              )
+
             ],
           ),
         ),
       ),
-      itemCount: userNotifier.userList.length,
+      itemCount: context.watch<UserNot>().userList.length,
+      //Here the above line means that
+      // we are watching the changes in the UserNot class and will
+      // update the length of userList accordingly
     );
   }
 }
